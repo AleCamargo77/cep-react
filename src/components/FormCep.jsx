@@ -16,21 +16,28 @@ const FormCep = () => {
 
     const apiCep = fetch(`https://viacep.com.br/ws/${cep}/json/`);
 
+    const cepIsValid = (cep) => {
+      cep.length == 8;
+    };
+    // const getCep = async () => {
+    //   const req = await fetch("https://viacep.com.br/ws/110756800/json");
+
     apiCep.then((res) => {
-      if (apiCep) {
-        res.json().then((data) => {
+      const response = res.json().then((data) => {
+        if (data.hasOwnProperty("erro")) {
+          console.log("erro");
+          setValue("street", (data.logradouro = "CEP Inválido"));
+        } else {
           setValue("street", data.logradouro);
           setValue("neighborhood", data.bairro);
           setValue("city", data.localidade);
           setValue("state", data.uf);
           setFocus("number");
-          console.log(data);
+
           console.log(res);
-          console.log(apiCep);
-        });
-      } else {
-        alert("erro");
-      }
+          console.log(data.logradouro);
+        }
+      });
     });
   };
 
